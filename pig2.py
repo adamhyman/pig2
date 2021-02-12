@@ -335,6 +335,7 @@ class Game():
             if other_players.get_name() != player.get_name():
               self.__players.remove(other_players)
           self.ending_message(self.__players[0].get_name())
+          break
             
 
   def ending_message(self, winner):
