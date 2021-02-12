@@ -171,7 +171,6 @@ class Player:
         #  Returns 'End of Turn' / 'End of Game' / 'Go Again'
         turn_status = self.toss()
 
-        #  If after  
         if (turn_status == 'End of Turn'):
           return 'End of Turn'
 
