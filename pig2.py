@@ -265,7 +265,8 @@ class Player:
 
 
 testplayer = Player("John", 50)
-assert(testplayer.getpoints()) == 0    
+assert(testplayer.get_points()) == 0
+assert(type(testplayer.get_name()) == str
 
 #  Class that contains the players, and controls them.
 #  play_game() is what makes the players play, by running the each player's turn()
