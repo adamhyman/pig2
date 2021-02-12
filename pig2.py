@@ -264,8 +264,8 @@ class Player:
       return 'Go Again'
 
 
-John = Player()
-assert(John.getPoints) == 0    
+testPlayer = Player("John", 50)
+assert(testPlayer.getPoints()) == 0    
 
 #  Class that contains the players, and controls them.
 #  play_game() is what makes the players play, by running the each player's turn()
