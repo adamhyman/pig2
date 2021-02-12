@@ -1,5 +1,6 @@
 #  Pig
 #  For Marie Tsaasan
+#  By Adam Hyman
 #  Python at Orange Coast - CS231-42100
 
 
@@ -45,7 +46,7 @@ import random
 #  Oinker
 #  I recommend using a board size of 4 or 5 for testing
 
-board_size = 20
+board_size = 2
 
 
 #  Pig class
@@ -134,7 +135,11 @@ class Player:
     '''  Returns number of points that the player has  '''
     return self.__points
 
-  def turn(self) -> bool:
+  def get_name(self) -> str:
+    '''  Returns the name of the player  '''
+    return self.__name
+
+  def turn(self) -> str:
     '''  A player tosses until they pass or lose the game (Piggyback) or lose all their points (Oinker)  '''
 
     turn_status = 'Go Again'
@@ -159,10 +164,13 @@ class Player:
 
         #  If after  
         if (turn_status == 'End of Turn'):
-          return False
+          return 'End of Turn'
 
+        if (turn_status == 'Piggyback'):
+          return 'Piggyback'
+        
         if (turn_status == 'End of Game'):
-          return True
+          return 'End of Game'
         
         
 
@@ -179,7 +187,7 @@ class Player:
     if self.__pig1.on_top(self.__pig2):
       self.__points = -1
       print('Piggyback!  You lost the game!\n')
-      return 'End of Game'
+      return 'Piggyback'
 
     #  Oinker - pigs are touching
     elif self.__pig1.touching(self.__pig2):
@@ -266,13 +274,15 @@ class Game():
     print("Enter All Player Names  (When done enter 'X')")
     self.__players = []
 
-    while(True):
-        player_name = input("Enter Player " + str(count)+ " Name:  ")
-        if player_name == "X":
-            break
+    self.__count = 1
 
-    self.__players.append(Player(player_name, self.__target_score))
-  
+    while(True):
+      player_name = input("Enter Player " + str(self.__count)+ " Name:  ")
+      if player_name == "X":
+          break
+
+      self.__players.append(Player(player_name, self.__target_score))
+      self.__count += 1
     self.__game_over = False
 
     self.play_game()
@@ -284,26 +294,30 @@ class Game():
     When the game is over, it calls ending_message()
     '''
 
-    while (not(self.__game_over)):
+    while (True):
 
-    for player in self.__players:
-      self.__game_over = self.player.turn()
-      if (self.__game_over):
-        break
+      for player in self.__players:
+        turn_result = player.turn()
+        #  player.turn() return 'End of Turn' / 'End of Game' / 'Piggyback'
+        if turn_result == ('Piggyback'):
+          self.__players.remove(player)
+          #  If only one player left in game
+          if len(self.__players) == 1
+            self.ending_message(self.__players[0].get_name())
+          
+        if turn_result == ('End of Game'):
+          #  player won on points
+          #  remove all other players
+          
+          for other_players in self.__players:
+            if other_players.get_name() != player.get_name():
+              self.__players.remove(other_players)
+            self.ending_message(self.__players[0].get_name())
 
-    #  Player 1 won
-    for player in self.__players:
-      if player.get_points() >= self.__target_score or self.__player2.get_points == -1:
-      self.ending_message(self.__player1_name, self.__player2_name)
-    #  Player 2 won
-    else:
-      self.ending_message(self.__player2_name, self.__player1_name)
-
-  def ending_message(self, winner, loser):
+  def ending_message(self, winner):
     '''  Print random victory message  '''
     m1 = ['Congratulations', 'Great job', 'Way to go', 'Solid performance', 'Nicely done']
-    m2 = ['Second place goes to', 'You defeated', 'Nice attempt', 'Better luck next time']
-    print (random.choice(m1) + ' ' + winner + '!!  ' + random.choice(m2) + ' ' + loser + '.')
+    print (random.choice(m1) + ' ' + winner + '!!')
     print ('Thank you for playing the Pig game!')
 
 #  Creates and starts a game of Pig
