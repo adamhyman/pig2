@@ -46,7 +46,7 @@ import random
 #  Oinker
 #  I recommend using a board size of 4 or 5 for testing
 
-board_size = 2
+board_size = 20
 
 
 #  Pig class
@@ -87,6 +87,8 @@ class Pig:
     
     rv = random.random()
 
+    
+
     if rv < 2 / 19:
       self.__position = 'Leaning Jowler'  # Prob 2 / 19
     elif rv < 5 / 19:
@@ -97,6 +99,8 @@ class Pig:
       self.__position = 'Razorback'       # Prob 4 / 19
     else:
       self.__position = 'Sider'           # Prob 6 / 19
+
+      
 
   def on_top (self, other) -> bool:
     '''  Returns true if one pig is on top of another pig.  Otherwize returns false.  '''
@@ -279,13 +283,22 @@ class Game():
     while(True):
       player_name = input("Enter Player " + str(self.__count)+ " Name:  ")
       if player_name == "X":
+          print ('')
           break
 
       self.__players.append(Player(player_name, self.__target_score))
       self.__count += 1
-    self.__game_over = False
 
     self.play_game()
+
+  def no_winner_on_points(self) -> bool:
+    '''  Returns True if there's no winner on points.  False otherwise.  '''
+
+    for player in self.__players:
+      if player.get_points() >= self.__target_score:
+        return False
+      
+    return True
 
   def play_game(self) -> None:
     '''
@@ -294,7 +307,7 @@ class Game():
     When the game is over, it calls ending_message()
     '''
 
-    while (True):
+    while (len(self.__players) > 1 and self.no_winner_on_points()):
 
       for player in self.__players:
         turn_result = player.turn()
@@ -302,8 +315,9 @@ class Game():
         if turn_result == ('Piggyback'):
           self.__players.remove(player)
           #  If only one player left in game
-          if len(self.__players) == 1
+          if len(self.__players) == 1:
             self.ending_message(self.__players[0].get_name())
+            
           
         if turn_result == ('End of Game'):
           #  player won on points
@@ -312,7 +326,8 @@ class Game():
           for other_players in self.__players:
             if other_players.get_name() != player.get_name():
               self.__players.remove(other_players)
-            self.ending_message(self.__players[0].get_name())
+          self.ending_message(self.__players[0].get_name())
+            
 
   def ending_message(self, winner):
     '''  Print random victory message  '''
