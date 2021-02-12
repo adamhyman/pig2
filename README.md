@@ -1,6 +1,5 @@
-# pig2
+# Pig 2
 
-## Changes made
-
-### Using classes
-### Variable number of players
+Changes made
+* Using classes
+* Variable number of players
