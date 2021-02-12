@@ -127,7 +127,7 @@ assert_pig = Pig()
 assert_pig.toss()
 assert_pig2 = Pig()
 assert_pig2.toss()
-assert(type((assert_pig.touching(assert_pig2))))
+assert(type((assert_pig.touching(assert_pig2)))) == bool
 
 #  A player that plays the pig game.  Each player tosses 2 pigs.
 class Player:
